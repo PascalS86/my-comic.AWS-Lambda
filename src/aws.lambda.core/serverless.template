@@ -30,6 +30,13 @@
 							"Path": "/",
 							"Method": "POST"
 						}
+					},
+					"AccessPost": {
+						"Type": "Api",
+						"Properties": {
+							"Path": "/access",
+							"Method": "POST"
+						}
 					}
 				}
 			}

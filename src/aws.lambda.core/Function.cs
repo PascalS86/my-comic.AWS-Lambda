@@ -15,6 +15,8 @@ namespace aws.lambda.core
 {
     public class Functions
     {
+
+        private readonly string ACCESS_CHECK = "ACCESS_CHECK";
         /// <summary>
         /// Default constructor that Lambda will invoke.
         /// </summary>
@@ -64,9 +66,15 @@ namespace aws.lambda.core
         {
              
             context.Logger.LogLine("POST Request\n");
-            var data = JsonConvert.DeserializeObject<Data.DataClass>(request.Body);
-            var result = await Data.ComicData.SaveComic(data.Data, data.Client);
-           
+            string result = "";
+            if(request.Path.Contains("access")){
+                var data = JsonConvert.DeserializeObject<Data.ClientClass>(request.Body);
+                result = data.Client == ACCESS_CHECK?"":"No changes allowed";
+            }
+            else{
+                var data = JsonConvert.DeserializeObject<Data.DataClass>(request.Body);
+                result = await Data.ComicData.SaveComic(data.Data, data.Client);
+            }
             var response = new APIGatewayProxyResponse
             {
                 StatusCode = (int)(string.IsNullOrWhiteSpace(result)?HttpStatusCode.OK:HttpStatusCode.BadRequest),

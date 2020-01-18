@@ -44,14 +44,21 @@ namespace aws.lambda.core.Data{
         
         internal static async Task<List<ComicData>> GetComics (string client=""){
            try{
-               if(client== "")
-                    throw new UnauthorizedAccessException("You didn't pass a valid client");
                 using(var context = new DynamoDBContext (SetupDynamoDbClient())){
                     var comics = await context.ScanAsync<ComicData>(
                         new List<ScanCondition>(){
                             new ScanCondition("ID",ScanOperator.BeginsWith, client )
                             }).GetRemainingAsync();
                     Console.WriteLine("After Scan");
+                    foreach(var comic in comics)
+                    {
+                        if(string.IsNullOrWhiteSpace(client) ||
+                           !comic.ID.Contains(client)){
+                               comic.LentTo = "";
+                               comic.LentSince = null;
+                           }
+
+                    }
                     return comics.ToList();
                 }
                 
@@ -64,7 +71,7 @@ namespace aws.lambda.core.Data{
 
         internal static async Task<string> SaveComic(ComicData data, string client = "")  {
             try{
-               if(client== "")
+               if(string.IsNullOrWhiteSpace(client))
                     throw new UnauthorizedAccessException("You didn't pass a valid client");
                 if(data.ID.Contains(client)){
                     using(var context = new DynamoDBContext (SetupDynamoDbClient())){
