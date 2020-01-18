@@ -47,7 +47,7 @@ namespace aws.lambda.core
             var response = new APIGatewayProxyResponse
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Body =  JsonConvert.SerializeObject(await Data.ComicData.GetComics(request.QueryStringParameters["client"])),
+                Body =  JsonConvert.SerializeObject(await Data.ComicData.GetComics(ACCESS_CHECK)),
                 Headers = new Dictionary<string, string> { 
                     { "Content-Type", "application/json" } ,
                     { "Access-Control-Allow-Origin", "*" }
