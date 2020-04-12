@@ -36,8 +36,8 @@ namespace aws.lambda.core.Data{
 
         static AmazonDynamoDBClient  SetupDynamoDbClient()=>
             new AmazonDynamoDBClient(
-                "AccessKey",
-                "Secret",
+                "",
+                "",
                 new AmazonDynamoDBConfig(){
                     RegionEndpoint = Amazon.RegionEndpoint.EUWest1
                 });
@@ -69,11 +69,11 @@ namespace aws.lambda.core.Data{
            }
         }
 
-        internal static async Task<string> SaveComic(ComicData data, string client = "")  {
+        internal static async Task<string> SaveComic(ComicData data, string client = "", string access_check = "")  {
             try{
                if(string.IsNullOrWhiteSpace(client))
                     throw new UnauthorizedAccessException("You didn't pass a valid client");
-                if(data.ID.Contains(client)){
+                if(client == access_check){
                     using(var context = new DynamoDBContext (SetupDynamoDbClient())){
                         await context.SaveAsync(data);
                         Console.WriteLine("After Save");

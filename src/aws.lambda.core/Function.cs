@@ -16,7 +16,7 @@ namespace aws.lambda.core
     public class Functions
     {
 
-        private readonly string ACCESS_CHECK = "ACCESS_CHECK";
+        internal readonly string ACCESS_CHECK = "@@ACCESS_CHECK@@";
         /// <summary>
         /// Default constructor that Lambda will invoke.
         /// </summary>
@@ -73,7 +73,7 @@ namespace aws.lambda.core
             }
             else{
                 var data = JsonConvert.DeserializeObject<Data.DataClass>(request.Body);
-                result = await Data.ComicData.SaveComic(data.Data, data.Client);
+                result = await Data.ComicData.SaveComic(data.Data, data.Client, ACCESS_CHECK);
             }
             var response = new APIGatewayProxyResponse
             {
