@@ -41,19 +41,22 @@ namespace aws.lambda.core.Data{
                 new AmazonDynamoDBConfig(){
                     RegionEndpoint = Amazon.RegionEndpoint.EUWest1
                 });
+
         
         internal static async Task<List<ComicData>> GetComics (string client=""){
            try{
                 using(var context = new DynamoDBContext (SetupDynamoDbClient())){
                     var comics = await context.ScanAsync<ComicData>(
                         new List<ScanCondition>(){
-                            new ScanCondition("ID",ScanOperator.BeginsWith, client )
-                            }).GetRemainingAsync();
+                        //    new ScanCondition("ID",ScanOperator.BeginsWith, client )
+                            }
+                            ).GetRemainingAsync();
                     Console.WriteLine("After Scan");
                     foreach(var comic in comics)
                     {
-                        if(string.IsNullOrWhiteSpace(client) ||
-                           !comic.ID.Contains(client)){
+                        if(string.IsNullOrWhiteSpace(client) //||
+                           //!comic.ID.Contains(client)
+                           ){
                                comic.LentTo = "";
                                comic.LentSince = null;
                            }

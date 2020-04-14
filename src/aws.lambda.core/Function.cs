@@ -16,7 +16,7 @@ namespace aws.lambda.core
     public class Functions
     {
 
-        internal readonly string ACCESS_CHECK = "@@ACCESS_CHECK@@";
+        internal readonly string ACCESS_CHECK = "";
         /// <summary>
         /// Default constructor that Lambda will invoke.
         /// </summary>
